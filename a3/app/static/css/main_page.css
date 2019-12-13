@@ -1,0 +1,593 @@
+
+body,html{
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+
+
+
+
+
+}
+
+table{
+border-collapse: collapse;
+border-spacing: 0px;
+box-sizing: border-box;
+
+width: 100%;
+border: none;
+}
+tr{
+border: none;
+cursor: pointer;
+
+
+
+}
+.table-heading{
+text-decoration: none;
+box-sizing: border-box;
+font-family: segoe ui, Helvetica, sans-serif;
+background-color: rgba(250,237,38, 0.9);
+font-size: 14px;
+color: rgba(70,52,78, 0.5);
+width: 100%;
+cursor: default;
+}
+
+.table-heading:hover{
+background-color: rgba(250,237,38, 0.9);
+}
+
+.grey-row{
+text-decoration: none;
+box-sizing: border-box;
+font-family: segoe ui, Helvetica, sans-serif;
+
+font-size: 14px;
+background-color: rgba(225,225,225, 0.8);
+color: rgba(70,52,78, 0.5);
+width: 100%;
+}
+
+.white-row{
+text-decoration: none;
+box-sizing: border-box;
+font-family: segoe ui, Helvetica, sans-serif;
+
+font-size: 14px;
+background-color: rgba(255,255,255, 0.8);
+color: rgba(70,52,78, 0.5);
+width: 100%;
+}
+
+.table-heading td{
+padding: 16px;
+text-align: center;
+
+}
+
+td{
+border: none;
+border-top: none;
+border-left: none;
+border-right: none;
+padding: 16px;
+text-align: center;
+
+
+
+}
+tr:hover{
+background-color: rgba(150,150,150, 0.9);
+}
+
+.right-popup-window{
+ /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+
+  background-color: rgba(10,10,10,0.9);
+  width: 0%;
+  /* Set a specific height */
+  height: 100%;
+  overflow: auto;
+  transition: 0.1s;
+  top: 0;
+  right:0;
+  position: fixed;
+  z-index:5;
+
+}
+.image-box{
+text-align: center;
+display: block;
+padding-top:10%;
+margin-left:auto;
+margin-right:auto;
+position: static;
+
+
+}
+.image-1{
+box-sizing: border-box;
+
+
+
+
+
+}
+.image-2{
+box-sizing: border-box;
+
+}
+
+.hero-image {
+  /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+  background-image: linear-gradient(rgba(70,52,78, 0.7), rgba(70,52,78, 0.7)),url(/static/img/new_york_skyline.jpg);
+
+  width: 100%;
+  /* Set a specific height */
+  height: 500px;
+
+  /* Position and center the image to scale nicely on all screens */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  position: relative;
+}
+
+.image_thumbnail{
+    position: relative;
+
+
+}
+
+
+
+.hero-image-full {
+  /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+  background-image: linear-gradient(rgba(70,52,78, 0.7), rgba(70,52,78, 0.7)),url(static/img/background.jpg);
+
+  width: 100%;
+  /* Set a specific height */
+  height: 100%;
+
+  /* Position and center the image to scale nicely on all screens */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  position: relative;
+
+}
+
+.hero-image-none {
+  /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+  background-color: rgba(70,52,78, 0.7);
+
+  width: 100%;
+  /* Set a specific height */
+  height: 100%;
+
+  /* Position and center the image to scale nicely on all screens */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  position: relative;
+
+}
+
+.work-area {
+  /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+  background-color: rgba(90, 85, 96, 1);
+
+
+  /* Set a specific height */
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+
+  float:right;
+  position: relative;
+  transition: 0.5s;
+
+
+  /* Position and center the image to scale nicely on all screens */
+}
+
+.work-area-switcher {
+  /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+  background-color: rgba(90, 85, 96, 1);
+
+  position: absolute;
+  float: left;
+
+  /* Set a specific height */
+  height: 100%;
+  width: 100%;
+
+
+  transition: 0.5s;
+
+
+  /* Position and center the image to scale nicely on all screens */
+}
+
+.form-area{
+padding-left: 50px;
+padding-top: 30px;
+padding-bottom: 30px;
+padding-right: 50px;
+height: auto;
+position: relative;
+border-style: double;
+border-color: #ffffff;
+border-width: 2px;
+background-color: rgba(20,20,20,0);
+overflow:auto;
+
+left: 50%;
+-webkit-transform: translate(-50%, 0%);
+
+}
+
+.form-area-invisible{
+padding-left: 50px;
+padding-top: 30px;
+padding-bottom: 30px;
+padding-right: 50px;
+height: auto;
+position: relative;
+border: none;
+background-color: rgba(20,20,20,0);
+overflow:auto;
+-webkit-transform: translate(-50%, 0%);
+left: 50%;
+
+
+}
+
+.graph-container{
+display: inline-block;
+height: 360px;
+width: 40%;
+background-color: rgba(255,255,255,0.8);
+margin: 20px;
+}
+
+
+
+
+
+
+.input100:focus {
+    box-sizing: border-box;
+    outline: none;
+    border: 2px solid rgba(250,237,38, 0.9);
+    border: 1.5px solid rgba(250,237,38, 0.9);
+    color: rgba(250,237,38, 0.9);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+
+    display: block;
+    width: 100%;
+    height: 40px;
+    background: 0 0;
+    font-family: segoe ui, Helvetica, sans-serif;
+    font-size: 16px;
+    line-height: 1.2;
+
+}
+::placeholder { /* Firefox, Chrome, Opera */
+    font-family: segoe ui, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgb(252,255,255, 1);
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+   font-family: segoe ui, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgb(252,255,255, 1);
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    font-family: segoe ui, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgb(252,255,255, 1);
+}
+.input100 {
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid rgba(250,237,38, 0.9);
+    color: rgba(255,255,255, 1);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+
+    display: block;
+    width: 100%;
+    height: 40px;
+    background: 0 0;
+    font-family: segoe ui, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.2;
+
+}
+
+.dropdownContainer{
+
+
+margin-right: 50px;
+height: auto;
+width:auto;
+position: relative;
+display: inline-block;
+
+}
+
+.input200 {
+   box-sizing: border-box;
+    outline: none;
+
+    border: 1px solid rgba(250,237,38, 0.9);
+    color: rgba(255,255,255, 1);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background-color: inherit;
+    display: block;
+    width: 100%;
+    height: 40px;
+
+    font-family: segoe ui, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.2;
+
+}
+
+
+
+.input200:focus{
+color: rgba(0,0,0, 1);
+
+}
+
+.yellow-button{
+border: none;
+float: right;
+padding: 0px 0px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 10px;
+  cursor: pointer;
+width: 120px;
+height: 35px;
+background-color: rgba(250,237,38, 0.9);
+color: rgba(70,52,78, 0.5);
+font-family: segoe ui, Helvetica, sans-serif;
+
+}
+
+.grey-button{
+border: none;
+float: right;
+padding: 0px 0px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+margin-left: 10px;
+cursor: pointer;
+width: 120px;
+height: 35px;
+background-color: rgba(150,150,150, 0.9);
+color: rgba(70,52,78, 0.5);
+font-family: segoe ui, Helvetica, sans-serif;
+
+}
+
+.text-box{
+box-sizing: border-box;
+font-family: segoe ui, Helvetica, sans-serif;
+position: relative;
+
+color: #ffffff;
+}
+
+button:active{border: none;}
+
+.image_thumbnail{
+    position: relative;
+
+
+
+}
+
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgba(20,20,20,0.5);
+
+  z-index:3;
+}
+
+
+
+
+li {
+  float: right;
+  background-color: rgba(20,20,20,0);
+
+
+  z-index:3;
+
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 12px 16px;
+  text-decoration: none;
+  font-family: segoe ui, Helvetica, sans-serif;
+  font-size: 13px;
+
+  z-index:3;
+}
+
+li a:hover {
+  background-color: rgba(20,20,20,0.7);
+  color: rgba(255,255,255, 1);
+
+  border-color:rgba(255,255,255, 0.5);
+
+
+}
+
+.active {
+
+  background-color: rgba(250,237,38, 0.9);
+  color: rgba(70,52,78, 0.5);
+
+  border-color: rgba(250,237,38, 1);
+
+
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: relative;
+  z-index: 1;
+  float:left;
+  top: 0;
+  left: 0;
+  background-color: rgba(20,20,20,0.5);
+  overflow: visible;
+  transition: 0.5s;
+
+}
+
+.sidenav a {
+  padding: 16px 0px;
+  height: auto;
+ text-decoration: none;
+  font-family: segoe ui, Helvetica, sans-serif;
+  font-size: 13px;
+  color: white;
+  text-align: center;
+  display: block;
+  transition: 0.0625s;
+  overflow: hidden;
+  cursor:pointer;
+}
+
+.sidenav a:hover {
+  background-color: rgba(20,20,20,0.7);
+  color: rgba(255,255,255, 1);
+  overflow-x: hidden;
+  border-color:rgba(255,255,255, 0.5);
+}
+
+.open-closebtn{
+    position: relative;
+
+    left: 0px;
+    padding: 0px;
+    margin: 0px;
+    width:20px;
+    height:20px;
+    color: white;
+    cursor:pointer;
+
+    background-color: rgba(72,66,75,1);
+    text-align: center;
+    margin-top: 0px;
+
+    transform: rotate(-90deg);
+}
+
+.clickable{
+border: none;
+float: right;
+padding: 16px;
+vertical-align: middle;
+text-decoration: none;
+display: inline-block;
+margin-left: 10px;
+cursor: pointer;
+width: 100%;
+height: 55px;
+background-color: rgba(150,150,150, 0.9);
+color: rgba(70,52,78, 0.5);
+font-family: segoe ui, Helvetica, sans-serif;
+
+}
+
+.clickable-yellow{
+border: none;
+float: right;
+padding: 16px;
+vertical-align: middle;
+text-decoration: none;
+display: inline-block;
+margin-left: 10px;
+cursor: pointer;
+width: 100%;
+height: 55px;
+background-color: rgba(250,237,38, 0.9);
+color: rgba(70,52,78, 0.5);
+font-family: segoe ui, Helvetica, sans-serif;
+
+}
+
+.user-list{
+
+border: 0.5px solid rgba(70,52,78, 0.5);
+border-top: none;
+border-left: none;
+border-right: none;
+
+float: right;
+padding: 16px;
+vertical-align: middle;
+text-decoration: none;
+display: inline-block;
+margin-left: 10px;
+cursor: pointer;
+width: 100%;
+height: 55px;
+background-color: rgba(255,255,255, 0.8);
+color: rgba(70,52,78, 0.5);
+font-family: segoe ui, Helvetica, sans-serif;
+
+}
+
+.user-list:hover{
+
+background-color: rgba(205,205,205, 0.8);
+
+}
+
+.clickable-yellow:hover{
+
+background-color: rgba(194,193,30, 0.9);
+
+}
+
+.clickable:hover{
+
+background-color: rgba(100,100,100, 0.9);
+
+}
+
+.form-area-invisible img{
+  height: 100%;
+  width: 100%;
+}

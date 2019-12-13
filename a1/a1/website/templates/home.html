@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="content-section">
+    {% if not current_user.is_authenticated %}
+        <center>
+            <h1>Text Detector</h1>
+            <h3>
+                Welcome! Please make sure to create account, so you can use our text detection software 
+                on images!
+            </h3>
+            <p>Once you login, you can upload any number of images that's under 5MB. Once the upload finishes, our software 
+            automatically draws rectangles around the images. Click on the thumbnails of the image you want to view, and 
+            you'll notice the rectangles marked around the text in the image.
+            </p>
+        </center>
+
+    {% else %}
+        <center>
+            <h1>Text Detector</h1>
+            <p>
+                Thank you for creating an account with us!
+            </p>
+            <p>Click on the upload button on the navigation bar to start uploading photos. Then sit back, and watch the magic
+                happen! The image below showcases how you can use this website to the fullest!
+            </p>    
+        </center>
+
+    {% endif %}
+
+</div>
+{% endblock content %}

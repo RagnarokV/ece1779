@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </head>
+<body class="hero-image-none">
+
+
+
+    <ul>
+        <li><a href= "{{url_for('login')}}">Logout</a></li>
+
+        <li><a class="active" href="{{url_for('admin_page')}}">Administrator</a></li>
+
+        <li><a  href="{{url_for('dashboard_page')}}">Dashboard</a></li>
+
+        <li><a href="{{url_for('alert_page')}}">Alerts</a></li>
+
+        <li><a href="{{url_for('monitor_page')}}">Monitoring</a></li>
+
+        <li><a href="{{url_for('home_page')}}">Home</a></li>
+
+
+    </ul>
+
+<diy class="work-area" style="width:20%;background-color: rgba(250,255,255, 0.8);">
+<div id="myBtn" onclick="myFunc('Demo1')" href="javascript:void(0)" class="clickable"><i class="fa fa-user-plus w3-margin-right"></i>Create New User</div>
+    <div id="listBtn" onclick="OpenClose()"  class="clickable-yellow" style="transition: 0.5s;"><i class="fa fa-users w3-margin-right"></i>Users List ({{user_list | count}})<i class="fa fa-caret-up w3-margin-left"></i></div>
+    <div id="user_container">
+    {% for user in user_list %}
+        <div  class="user-list" onclick="selectUser({{user}})" ><i class="fa fa-user-circle-o w3-margin-right"></i>{{user['name']}}</div>
+    {% endfor %}
+    </div>
+
+</diy>
+<div class="work-area" style="width:80%;overflow:hidden">
+    <br><br>
+     <div class="form-area" style="width:90%;">
+        <form style="height: 100%;" action="{{url_for('admin_page')}}" method="POST" enctype="multipart/form-data">
+                    <div class="text-box" style="font-size: 24px; float:left;">User Information</div><br>
+                    <br>
+                    <div class="text-box">
+                    <div class="dropdownContainer"><br>
+                        <div class="text-box"  style="font-size: 14px; float:left;">Name</div><br>
+                        {{ form.name(class="input200",id="form-name",style="width:200px; float:left;",placeholder="Enter Name")}}
+                    </div>
+                    <div class="dropdownContainer"><br>
+                        <div class="text-box" style="font-size: 14px; float:left;">Username</div><br>
+                        {{ form.username(class="input200",id="form-username",style="width:200px; float:left;",placeholder="Enter Username")}}
+                    </div>
+                    <div class="dropdownContainer"><br>
+                        <div class="text-box" style="font-size: 14px; float:left;">Access Level</div><br>
+                        {{ form.access_level(class="input200",id="form-access_level",style="width:200px; float:left;",placeholder="Current Access Level")}}
+                    </div>
+                    </div>
+                    <br>
+                    <div class="text-box">
+                    <div class="dropdownContainer"><br>
+                        <div class="text-box" style="font-size: 14px; float:left;">Password</div><br>
+                        {{ form.password(class="input200",style="width:200px; float:left;",placeholder="Enter Password")}}
+                    </div>
+
+                    <div class="dropdownContainer"><br>
+                        <div class="text-box" style="font-size: 14px; float:left;">Confirm Password</div><br>
+                        {{ form.confirm_password(class="input200",style="width:200px; float:left;",placeholder="Confirm Password")}}
+                    </div>
+                    </div>
+
+
+                    <div class="text-box">
+                    <div class="dropdownContainer" style="font-size: 14px; float:right;"><br>
+                        <div class="text-box" style="font-size: 14px; float:left;"></div><br>
+                       {{ form.remove(class="grey-button") }}
+                    </div>
+
+                    <div class="dropdownContainer" style="font-size: 14px; float:right;"><br>
+                        <div class="text-box" style="font-size: 14px; float:left;"></div><br>
+                       {{ form.submit(class="yellow-button") }}
+                    </div>
+                    </div>
+
+        </form>
+     </div>
+</div>
+
+<script>
+    var open_flag=1;
+    function selectUser(user){
+        console.log(user);
+        document.getElementById('form-name').value=user['name'];
+        document.getElementById('form-username').value=user['username'];
+        document.getElementById('form-access_level').value=user['access_level'];
+
+
+
+    }
+
+
+
+
+    function OpenClose(){
+    if (open_flag==1){
+    document.getElementById('user_container').style.height = "0px";
+    document.getElementById('user_container').style.overflow = "hidden";
+
+    open_flag=0;
+    document.getElementById('listBtn').innerHTML= "<i class=\"fa fa-users w3-margin-right\"></i>Users List ({{user_list | count}})<i class=\"fa fa-caret-down w3-margin-left\"></i>";
+
+        }
+    else{
+    document.getElementById('user_container').style.overflow = "overflow";
+    document.getElementById('user_container').style.height = "auto";
+    document.getElementById('user_container').style.width = "100%";
+
+    open_flag=1;
+    document.getElementById('listBtn').innerHTML= "<i class=\"fa fa-users w3-margin-right\"></i>Users List ({{user_list | count}})<i class=\"fa fa-caret-up w3-margin-left\"></i>";
+        }
+    }
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

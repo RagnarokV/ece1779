@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    </head>
+<body class="hero-image-none">
+
+
+
+    <ul>
+            <li><a href= "{{url_for('login')}}">Logout</a></li>
+
+            <li><a href="{{url_for('admin_page')}}">Administrator</a></li>
+    
+            <li><a href="{{url_for('dashboard_page')}}">Dashboard</a></li>
+    
+            <li><a href="{{url_for('alert_page')}}">Alerts</a></li>
+    
+            <li><a class = "active" href="{{url_for('monitor_page')}}">Monitoring</a></li>
+    
+            <li><a href="{{url_for('home_page')}}">Home</a></li>
+
+    </ul>
+    <div id="mySidenav" class="sidenav">
+
+        <a onclick="select_action(1)" id="button_1">Metric Browser</a>
+        <a onclick="select_action(2)" id="button_2">Custom Query</a>
+
+    </div>
+    <div class="work-area" id="work-area">
+
+        <div class="open-closebtn" id="open-closebtn" onclick="openNav()">&#9660;</div>
+        <div class="work-area-switcher" id="window_1" style="z-index: 2;">
+            <form action="{{url_for('monitor_page')}}" method="POST" enctype="multipart/form-data">
+            <div class="right-popup-window" id="popup_window_1"  style="background-color: rgba(250,255,255, 1);" >
+
+                <div id="myBtn" onclick="" href="javascript:void(0)" class="clickable"><i class="fa fa-user-plus w3-margin-right"></i>Pinning to Dashboard</div>
+                <div id="listBtn" onclick="OpenClose()"  class="clickable-yellow" style="transition: 0.5s;"><i class="fa fa-users w3-margin-right"></i>Dashboard List ({{dashboard_list | count}})<i class="fa fa-caret-up w3-margin-left"></i></div>
+                    <div style="width:100%; height:75%;overflow:hidden;">
+                        <div id="user_container" style="overflow:auto;">
+                            {% for dashboard in dashboard_list %}
+                                <div  class="user-list" onclick="selectDashboard({{dashboard}})" ><i class="fa fa-user-circle-o w3-margin-right"></i>{{dashboard['dashboard_name']}}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    {{widget_form.submit_widget( class="yellow-button",style = "float: left; margin-left: 20px; margin-top:10px;",onclick="pinDashboard(0)")}}
+
+                    <button class="grey-button" style = "float: left; margin-left: 20px;margin-top:10px;" onclick="pinDashboard(0)">Cancel</button>
+
+
+                   {{widget_form.widgetID(id='widgetID')}}
+                   {{widget_form.DashboardID(id='dashboardID')}}
+                   {{widget_form.widgetQuery(id='wigetQuery')}}
+
+
+
+
+
+
+
+            </div></form>
+
+
+            <br><br>
+            <form action="{{url_for('monitor_page')}}" method="POST" enctype="multipart/form-data">
+                <div class="form-area" style="width:90%;">
+                    <div class="text-box" style="font-size: 24px; float:left;">Metric Browser</div><br>
+                    <br>
+
+                    <br>
+
+                    <div class="dropdownContainer">
+                        <div class="text-box" style="font-size: 14px; float:left;">Application Name</div><br>
+
+                        {{ form.application(class="input200",style="width:200px; float:left;",placeholder="Select Application",id='application_select', onchange="OnChooseApplication();")}}
+                    </div>
+                    <div class="dropdownContainer">
+                        <div class="text-box" style="font-size: 14px; float:left;">Node Name</div><br>
+                        {{ form.node(class="input200",style="width:200px; float:left;",id='node_select',placeholder="Select Application")}}
+                    </div>
+                    <div class="dropdownContainer">
+                        <div class="text-box" style="font-size: 14px; float:left;">Metric Name</div><br>
+                        {{ form.metric(class="input200",style="width:200px; float:left;",placeholder="Select Application")}}
+                    </div>
+
+                    <div class="dropdownContainer" style="font-size: 14px; float:right;">
+
+                        <div class="text-box" style="font-size: 14px; float:left;"></div><br>
+                       {{ form.submit(class="yellow-button") }}
+                    </div>
+
+                    <br><br><br>
+
+
+                </div>
+            </form>
+            <br><br><br>
+            <div class="form-area" style="width:90%; height:auto; ">
+                <div class="text-box" style="font-size: 14px; float:left; width: 100%;display: block;padding-bottom:40px;">
+                    <button class="clickable-yellow" onclick="pinDashboard(1)" style="width: auto; float: left; margin: 0px;"><i class="fa fa-thumb-tack w3-margin-right"></i>  Pin to Dashboard</button>
+
+                </div>
+                <br><br>
+
+
+                <div id="plot_chart" style="width:100%;border:None;padding:0px; overflow: hidden;">
+
+                </div>
+
+
+            </div>
+
+
+
+
+        </div>
+        <div class="work-area-switcher" id="window_2" style="z-index: 1;">Custom Query</div>
+
+
+    </div>
+
+
+
+<script>
+var widget_count= {{widget_count}};
+var open_flag=1;
+var open_close;
+open_close=0;
+OnChooseApplication();
+plotGraph();
+var dashboard_list = {{ dashboard_list | tojson}};
+
+function selectDashboard(dashboard){
+ document.getElementById('dashboardID').value = dashboard['dashboard_ID'];
+ document.getElementById('myBtn').innerHTML= 'Pinning to '+ dashboard['dashboard_name'];
+
+}
+
+function pinDashboard(a){
+    if(a==1){
+    widget_count= widget_count + 1;
+    document.getElementById("popup_window_1").style.width = "20%";
+    document.getElementById('wigetQuery').value='{{query | tojson}}';
+    document.getElementById('widgetID').value = 1000 + widget_count;
+    document.getElementById('dashboardID').value = (dashboard_list[0])['dashboard_ID'];
+    document.getElementById('myBtn').innerHTML= 'Pinning to '+ (dashboard_list[0])['dashboard_name'];
+
+
+
+    }
+    else{
+    document.getElementById("popup_window_1").style.width = "0%";
+
+
+    }
+
+}
+
+function OnChooseApplication(){
+    var i, nlen;
+    var application_now =  document.getElementById('application_select').options[ document.getElementById('application_select').selectedIndex ].text;
+
+    var node_choices = [];
+    var node_list={{node_list | tojson}};
+
+    nlen = node_list.length;
+    document.getElementById('node_select').options.length = 0;
+    for(i = 0; i < nlen; i++){
+
+        if ((node_list[i])['application_name'] == application_now){
+            var opt = document.createElement('option');
+            opt.value = (node_list[i])['node_ID'];
+            opt.innerHTML = (node_list[i])['node_ID'];
+            document.getElementById('node_select').appendChild(opt);
+         }
+    }
+}
+
+
+function plotGraph(){
+    var data_x={{data_x | tojson}};
+    var data_y={{ data_y | tojson}};
+    var no_of_points= data_x.length;
+
+
+    if (no_of_points>0){
+        console.log('Plot Graph');
+        var trace ={
+            x: data_x,
+            y: data_y,
+            type: 'scatter',
+            };
+        var data=[trace]
+        Plotly.newPlot('plot_chart', data, {}, {showSendToCloud: true});
+
+    }
+    else{
+        console.log('No Graph to plot');
+
+    }
+
+}
+
+
+function make_active(a){
+    if (a==1){
+        document.getElementById("button_1").style.backgroundColor  = "rgba(250,237,38, 0.9)";
+        document.getElementById("button_1").style.color = "rgba(70,52,78, 0.5)";
+        document.getElementById("button_1").style.borderColor = "rgba(250,237,38, 1)";
+        document.getElementById("button_2").style.backgroundColor  = "rgba(72,66,75,1)";
+        document.getElementById("button_2").style.color = "white";
+        document.getElementById("button_2").style.borderColor = "rgba(72,66,75,1)";
+
+
+        console.log(a);
+    }
+    else{
+        document.getElementById("button_2").style.backgroundColor  = "rgba(250,237,38, 0.9)";
+        document.getElementById("button_2").style.color = "rgba(70,52,78, 0.5)";
+        document.getElementById("button_2").style.borderColor = "rgba(250,237,38, 1)";
+        document.getElementById("button_1").style.backgroundColor  = "rgba(72,66,75,1)";
+        document.getElementById("button_1").style.color = "white";
+        document.getElementById("button_1").style.borderColor = "rgba(72,66,75,1)";
+
+
+        console.log(a);
+    }
+
+
+
+
+}
+
+
+
+function select_action(a){
+    if (a==1){
+        document.getElementById("window_1").style.zIndex = "2";
+        document.getElementById("window_2").style.zIndex = "1";
+
+         make_active(a);
+        console.log(a);
+    }
+    else {
+        document.getElementById("window_1").style.zIndex = "1";
+        document.getElementById("window_2").style.zIndex= "2";
+
+         make_active(a);
+        console.log(a);
+    }
+
+
+
+
+}
+
+function OpenClose(){
+    if (open_flag==1){
+    document.getElementById('user_container').style.height = "0px";
+    document.getElementById('user_container').style.overflow = "hidden";
+
+    open_flag=0;
+    document.getElementById('listBtn').innerHTML= "<i class=\"fa fa-users w3-margin-right\"></i>Dashboard List ({{dashboard_list | count}})<i class=\"fa fa-caret-down w3-margin-left\"></i>";
+
+        }
+    else{
+    document.getElementById('user_container').style.overflow = "overflow";
+    document.getElementById('user_container').style.height = "auto";
+    document.getElementById('user_container').style.width = "100%";
+
+    open_flag=1;
+    document.getElementById('listBtn').innerHTML= "<i class=\"fa fa-users w3-margin-right\"></i>Dashboard List ({{dashboard_list | count}})<i class=\"fa fa-caret-up w3-margin-left\"></i>";
+        }
+    }
+
+
+
+
+function openNav() {
+  if (open_close==0){
+    document.getElementById("work-area").style.width = "85%";
+    document.getElementById("mySidenav").style.width = "15%";
+    document.getElementById("open-closebtn").innerHTML= "&#9650;";
+    open_close=1;
+  }else
+  {
+    document.getElementById("mySidenav").style.width = "0%";
+    document.getElementById("work-area").style.width = "100%";
+    document.getElementById("open-closebtn").innerHTML= "&#9660;";
+    open_close=0;
+   }
+}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

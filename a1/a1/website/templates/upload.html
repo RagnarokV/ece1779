@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <h3>Upload Photos</h3>
+        <p>Click on the button below to upload images. We accept only JPG, JPEG and PNG images!</p>
+        <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">   
+                    {{ form.picture(class="form-control-file") }}
+                    {% if form.picture.errors %}
+                        {% for error in form.picture.errors %}
+                            <span class="text-danger">{{ error }}</span> <br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+            </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+        </form>
+    </div>
+
+{% endblock content %}

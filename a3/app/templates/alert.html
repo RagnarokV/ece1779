@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+<body class="hero-image-none">
+
+
+
+    <ul>
+            <li><a href= "{{url_for('login')}}">Logout</a></li>
+
+            <li><a href="{{url_for('admin_page')}}">Administrator</a></li>
+    
+            <li><a  href="{{url_for('dashboard_page')}}">Dashboard</a></li>
+    
+            <li><a class="active" href="{{url_for('alert_page')}}">Alerts</a></li>
+    
+            <li><a href="{{url_for('monitor_page')}}">Monitoring</a></li>
+    
+            <li><a href="{{url_for('home_page')}}">Home</a></li>
+
+
+    </ul>
+
+
+    <div id="mySidenav" class="sidenav">
+
+        <a onclick="select_action(1)" id="button_1">Health-Rules</a>
+        <a onclick="select_action(2)" id="button_2">Action-Groups</a>
+        <a onclick="select_action(3)" id="button_3">Policies</a>
+    </div>
+    <div class="work-area" id="work-area">
+
+        <div class="open-closebtn" id="open-closebtn" onclick="openNav()">&#9660;</div>
+        <div class="work-area-switcher" id="window_1" style="z-index: 2;">
+            <div class="right-popup-window" id="popup_window_1" >
+                <form style="height: 100%;" action="{{url_for('alert_page')}}" method="POST" enctype="multipart/form-data">
+                    <br>
+                    <div class="text-box" onclick="create_alert(0,0,'','','')" style="padding:5px;width:auto;float:right;cursor: pointer;"><i class="fa fa-close w3-margin-right"></i></div>
+                    <div class="form-area" style="width:90%;border:None;padding:10px;top:20px; overflow: hidden; height: 90%;">
+                        <br>
+                        <div class="text-box" style="font-size: 24px; float:left;">Create Health Rule</div>
+                        <br><br><br>
+                        <div class="dropdownContainer">
+                            <div class="text-box" style="font-size: 14px; float:left;">Health Rule Name</div><br>
+                            {{ create_health_form.rule_id() }}
+                            {{ create_health_form.rule_name(class="input100",style="width:300px; float:left;",placeholder="Health Rule Name",id='health_rule_name')}}
+                        </div><br><br>
+                        <div class="dropdownContainer">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Application Name</div><br>
+                            {{ create_health_form.application(class="input200",style="width:200px; float:left;",placeholder="Select Application", onchange ="OnChooseApplication_form();")}}
+                        </div>
+                        <div class="dropdownContainer">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Node Name</div><br>
+                            {{ create_health_form.node(class="input200",style="width:200px; float:left;",placeholder="Select Application")}}
+                        </div>
+                        <br><br><br><br>
+
+                        <div class="text-box" style="font-size: 18px; float:left;">Health Rule Expression</div>
+                        <br><br>
+                        <div class="dropdownContainer" style="margin-right:20px;">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Node Name</div><br>
+                            {{ create_health_form.metric(class="input200",style="width:200px; float:left;",placeholder="Select Application")}}
+                        </div>
+
+                        <div class="dropdownContainer" style="margin-right:20px;">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Operator</div><br>
+                            {{ create_health_form.operator(class="input200",style="width:50px; float:left;",placeholder="Operator")}}
+                        </div>
+
+
+
+
+
+                        <div class="dropdownContainer" style="margin-right:20px;">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Value</div><br>
+                            {{ create_health_form.value(class="input100",style="width:70px; float:left;",placeholder="Value")}}
+                        </div>
+                        <div class="text-box" style="font-size: 14px; position: absolute; top: 90%;float:left; width:100%; ">{{ create_health_form.submit_health_rule(class="yellow-button",style=" float:right;",placeholder="Operator")}}
+                            {{ create_health_form.remove_health_rule(class="grey-button",style=" float:right;",placeholder="Operator")}}</div>
+
+                    </div>
+                </form>
+            </div>
+            <br><br>
+
+
+                <div class="form-area" style="width:90%;">
+
+                    <div class="text-box" style="font-size: 24px; float:left;">Select Resource</div><br>
+                    <br><br>
+                    <div class="dropdownContainer">
+                        <div class="text-box" style="font-size: 14px; float:left;">Application Name</div><br>
+                        {{ form.application(class="input200",id='application_select',style="width:200px; float:left;",placeholder="Select Application",onchange="OnChooseApplication();")}}
+                    </div>
+                    <div class="dropdownContainer">
+                        <div class="text-box" style="font-size: 14px; float:left;">Node Name</div><br>
+                        {{ form.node(class="input200",id='node_select',style="width:200px; float:left;",placeholder="Select Application")}}
+                    </div>
+
+
+                    <div class="dropdownContainer" style="font-size: 14px; float:right;">
+                        <div class="text-box" style="font-size: 14px; float:left;"></div><br>
+                       {{ form.submit(class="yellow-button", onclick='filter_heath_rule_node()') }}
+                    </div>
+
+                    <br><br>
+
+                </div>
+
+            <br>
+            <br>
+            <div class="form-area" style="width:90%;border-color: rgba(0,0,0,0); padding:0px;">
+                <button class="clickable-yellow" onclick="create_alert(1,0,'','','')" style="width:auto;padding:16px;float:left;margin-left:0px;">
+                    <i class="fa fa-plus-circle w3-margin-right"></i>Create New Heath Rule</button>
+            </div>
+            <div class="form-area" id='alert_table' style="width:90%;border-color: rgba(0,0,0,0); padding:0px;">
+                
+                <br><br>
+                <table>
+                    <tr class="table-heading">
+                        <td >Alert ID</td>
+                        <td>Alert Name</td>
+                        <td>Application</td>
+                        <td>Node</td>
+
+                    </tr>
+                    {% set count = namespace(value=0) %}
+                    {% for alert in alert_list%}
+                        {% if count.value == 0 %}
+                            {% set count.value = 1 %}
+                            <tr class="white-row" onclick="create_alert(1,{{alert['alert_ID']}},'{{alert['description']}}','{{alert['Application']}}','{{alert['node_ID']}}');">
+                                <td>{{alert['alert_ID']}}</td>
+                                <td>{{alert['description']}}</td>
+                                <td>{{alert['Application']}}</td>
+                                <td>{{alert['node_ID']}}</td>
+                            </tr>
+                        {% else %}
+                            {% set count.value = 0 %}
+                            <tr class="grey-row" onclick="create_alert(1,{{alert['alert_ID']}},'{{alert['description']}}','{{alert['Application']}}','{{alert['node_ID']}}');">>
+                                <td>{{alert['alert_ID']}}</td>
+                                <td>{{alert['description']}}</td>
+                                <td>{{alert['Application']}}</td>
+                                <td>{{alert['node_ID']}}</td>
+                            </tr>
+
+                        {% endif %}
+
+
+                    {% endfor %}
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+        <div class="work-area-switcher" id="window_2" style="z-index: 1;">
+             <div class="right-popup-window" id="popup_window_2" ><br>
+                 <form style="height: 100%;" action="{{url_for('alert_page')}}" method="POST" enctype="multipart/form-data">
+                     <div class="text-box" onclick="create_action_group(0)" style="padding:5px;width:auto;float:right;cursor: pointer;"><i class="fa fa-close w3-margin-right"></i></div>
+                     <div class="form-area" style="width:90%;border:None;padding:10px;top:20px; overflow: hidden; height: 90%;">
+                        <br>
+                        <div class="text-box" style="font-size: 24px; float:left;">Create Action-Group</div>
+                         <br><br>
+
+                            {{create_action_form.groupID()}}
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Group Name</div><br>
+                            {{ create_action_form.group_name(class="input100",style="width:200px; float:left;",placeholder="Select Application")}}
+                        <br><br><br>
+
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Action (Email list separated by a comma)</div><br><br>
+                            {{ create_action_form.email_list(class="input100",style="width:100%; height:300px; border: 1px solid rgba(250,237,38, 0.9); background-color: rgba(20,20,20,1); float:left;",placeholder="Enter Email List")}}
+                        <br>
+
+                         <div class="text-box" style="font-size: 14px; position: absolute; top: 90%;float:left; width:100%; ">{{ create_action_form.submit_action(class="yellow-button",style=" float:right;")}}
+                            {{ create_action_form.remove_action(class="grey-button",style=" float:right;")}}</div>
+
+
+
+
+
+                     </div>
+                 </form>
+
+
+
+             </div>
+            <div class="form-area" style="width:90%;border-color: rgba(0,0,0,0); padding:0px; ">
+                <div class="text-box" style="font-size: 24px; float:left;">Action-Groups</div><br><br><br>
+                <button class="clickable-yellow" onclick="create_action_group(1,0,'','')" style="width:auto;padding:16px;float:left;margin-left:0px;">
+                    <i class="fa fa-plus-circle w3-margin-right"></i>Create New Action-Groups</button>
+            </div>
+            <br>
+            <br>
+
+            <div class="form-area" style="width:90%;border-color: rgba(0,0,0,0); padding:0px;">
+                <table>
+                <tr class="table-heading">
+                    <td >Group ID</td>
+                    <td>Group Name</td>
+                    <td>Action</td>
+
+                </tr>
+                {% set count = namespace(value=0) %}
+                {% for group in group_list%}
+                    {% if count.value == 0 %}
+                        {% set count.value = 1 %}
+
+                        <tr class="white-row" onclick="create_action_group(1,{{group['group_ID']}},'{{group['group_name']}}',{{group['action']|safe}})">
+                            <td >{{group['group_ID']}}</td>
+                            <td>{{group['group_name']}}</td>
+                            <td>{{group['action']}}</td>
+
+                </tr>
+                    {% else %}
+                        {% set count.value = 0 %}
+
+                        <tr class="grey-row" onclick="create_action_group(1,{{group['group_ID']}},'{{group['group_name']}}',{{group['action']|safe}})">
+                            <td>{{group['group_ID']}}</td>
+                            <td>{{group['group_name']}}</td>
+                            <td>{{group['action']}}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+
+            </table>
+
+
+            </div>
+        </div>
+        <div class="work-area-switcher" id="window_3" style="z-index: 1;">
+            <div class="right-popup-window" id="popup_window_3"  >
+                
+                <form style="height: 100%;" action="{{url_for('alert_page')}}" method="POST" enctype="multipart/form-data">
+                    <br>
+                    <div class="text-box" onclick="create_policy(0)" style="padding:5px;width:auto;float:right;cursor: pointer;"><i class="fa fa-close w3-margin-right"></i></div>
+                    <div class="form-area" style="width:90%;border:None;padding:10px;top:20px; overflow: hidden; height: 90%; overflow: auto;">
+                        <br>
+                        <div class="text-box" style="font-size: 24px; float:left;">Create Policy</div>
+                        <br><br>
+                        <div class="dropdownContainer">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Policy ID</div><br>
+                            {{ policy_form.policy_id(class="input100",style="width:100px; float:left;",placeholder="", readonly=true)}}
+                        </div>
+                        <div class="dropdownContainer">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Health Rule</div><br>
+                            {{ policy_form.health_rule(class="input100",style="width:100px; float:left;",placeholder="", readonly=true)}}
+                        </div>
+
+                        <div class="dropdownContainer">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Action Group</div><br>
+                            {{ policy_form.action_group(class="input100",style="width:100px; float:left;",placeholder="",readonly=true)}}
+                        </div>
+
+
+
+                        <br>
+                        <div class="dropdownContainer">
+                            <br>
+                            <div class="yellow-button" id="health_rule_button" onclick="heath_rule_view()" style="width:auto;padding:10px;float:left;margin-left:0px;">
+                            Set Health Rule</div>
+                            <div class="grey-button" id="action_group_button" onclick="action_group_view()" style="width:auto;padding:10px;float:left;margin-left:0px;">
+                            Set Action Group</div>
+
+                            </div>
+                        <br>
+                        <div id="choice-table" style="width:90%; height: 50%; border: 1px solid rgba(250,250,250, 0.9);background-color: rgba(20,20,20,1); padding:0px; overflow: auto;">
+                        </div><br><br>
+                        <div class="text-box" style="font-size: 14px; position: absolute; float:left; width:100%; ">
+                            {{ policy_form.submit(class="yellow-button",style=" float:right;")}}
+                        </div>
+                    </form>
+                </div>
+                
+
+            </div>
+
+            <div class="form-area" style="width:90%;border-color: rgba(0,0,0,0); padding:0px; ">
+                <div class="text-box" style="font-size: 24px; float:left;">Policies</div><br><br><br>
+                <button class="clickable-yellow" onclick="create_policy(1)" style="width:auto;padding:16px;float:left;margin-left:0px;">
+                    <i class="fa fa-plus-circle w3-margin-right"></i>Create New Policy</button>
+
+
+
+            </div>
+            <br>
+            <br>
+
+            <div class="form-area" style="width:90%;border-color: rgba(0,0,0,0); padding:0px;">
+                <table>
+                    <tr class="table-heading">
+                        <td >Policy ID</td>
+                        <td>Group ID</td>
+                        <td>Alert ID</td>
+
+                    </tr>
+                    {% set count = namespace(value=0) %}
+                    {% for policy in policy_list%}
+                        {% if count.value == 0 %}
+                            {% set count.value = 1 %}
+
+                            <tr class="white-row">
+                                <td >{{policy['policy_ID']}}</td>
+                                <td>{{policy['group_ID']}}</td>
+                                <td>{{policy['alerts']}}</td>
+
+                    </tr>
+                        {% else %}
+                            {% set count.value = 0 %}
+
+                            <tr class="grey-row">
+                                <td >{{policy['policy_ID']}}</td>
+                                <td>{{policy['group_ID']}}</td>
+                                <td>{{policy['alerts']}}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+
+
+                </table>
+
+
+            </div>
+
+
+
+
+
+
+        </div>
+
+    </div>
+
+
+<script>
+var open_close;
+open_close=0;
+var HealthRuleListSize = {{alert_list| count}};
+var ActionGroupCount = {{group_list| count}};
+var PolicyCount={{policy_list | count}}
+OnChooseApplication();
+OnChooseApplication_form();
+
+
+function OnChooseApplication(){
+    var i, nlen;
+    var application_now =  document.getElementById('application_select').options[ document.getElementById('application_select').selectedIndex ].text;
+
+    var node_choices = [];
+    var node_list=JSON.parse('{{node_list | tojson}}');
+
+    nlen = node_list.length;
+    document.getElementById('node_select').options.length = 0;
+
+
+    for(i = 0; i < nlen; i++){
+
+        if ((node_list[i])['application_name'] == application_now){
+            var opt = document.createElement('option');
+            opt.value = (node_list[i])['node_ID'];
+            opt.innerHTML = (node_list[i])['node_ID'];
+            document.getElementById('node_select').appendChild(opt);
+         }
+    }
+}
+
+function OnChooseApplication_form(){
+    var i, nlen;
+    var application_now =  document.getElementById('application').options[ document.getElementById('application').selectedIndex ].text;
+
+    var node_choices = [];
+    var node_list=JSON.parse('{{node_list | tojson}}');
+
+    nlen = node_list.length;
+    document.getElementById('node').options.length = 0;
+
+
+    for(i = 0; i < nlen; i++){
+
+        if ((node_list[i])['application_name'] == application_now){
+            var opt = document.createElement('option');
+            opt.value = (node_list[i])['node_ID'];
+            opt.innerHTML = (node_list[i])['node_ID'];
+            document.getElementById('node').appendChild(opt);
+         }
+    }
+}
+
+
+
+function filter_heath_rule_node(){
+    var i, alen;
+    var node_now =  document.getElementById('node_select').options[ document.getElementById('node_select').selectedIndex ].text;
+    var alert_list=JSON.parse('{{alert_list | tojson}}');
+    var filtered_alert=[];
+    alen = alert_list.length;
+    for(i =0; i < alen; i++){
+        if((alert_list[i])['node_ID']==node_now){
+            filtered_alert.push(alert_list[i]);
+        }
+    }
+
+    var temp=`
+    <table>
+
+                <tr class="table-heading">
+                    <td >Alert ID</td>
+                    <td>Alert Name</td>
+                    <td>Application</td>
+                    <td>Node</td>
+
+                </tr>`
+    alen = filtered_alert.length;
+    var count= 0;
+    for(i=0; i < alen ;i++){
+        if(count==0){
+            count = 1;
+            temp = temp + `<tr class="white-row">
+                            <td>`+(filtered_alert[i])['alert_ID']+`</td>
+                            <td>`+(filtered_alert[i])['description']+`</td>
+                            <td>`+(filtered_alert[i])['Application']+`</td>
+                            <td>`+(filtered_alert[i])['node_ID']+`</td>
+                        </tr>`;
+            }
+        else{
+        count=0;
+        temp = temp + `<tr class="grey-row">
+                            <td>`+(filtered_alert[i])['alert_ID']+`</td>
+                            <td>`+(filtered_alert[i])['description']+`</td>
+                            <td>`+(filtered_alert[i])['Application']+`</td>
+                            <td>`+(filtered_alert[i])['node_ID']+`</td>
+                        </tr>`;
+        }
+
+
+
+    }
+    temp= temp + `</table>`;
+    document.getElementById('alert_table').innerHTML=temp;
+
+
+
+
+
+}
+
+function make_active(a){
+    if (a==1){
+        document.getElementById("button_1").style.backgroundColor  = "rgba(250,237,38, 0.9)";
+        document.getElementById("button_1").style.color = "rgba(70,52,78, 0.5)";
+        document.getElementById("button_1").style.borderColor = "rgba(250,237,38, 1)";
+        document.getElementById("button_2").style.backgroundColor  = "rgba(72,66,75,1)";
+        document.getElementById("button_2").style.color = "white";
+        document.getElementById("button_2").style.borderColor = "rgba(72,66,75,1)";
+        document.getElementById("button_3").style.backgroundColor  = "rgba(72,66,75,1)";
+        document.getElementById("button_3").style.color = "white";
+        document.getElementById("button_3").style.borderColor = "rgba(72,66,75,1)";
+
+        console.log(a);
+    }
+    else if(a==2){
+        document.getElementById("button_2").style.backgroundColor  = "rgba(250,237,38, 0.9)";
+        document.getElementById("button_2").style.color = "rgba(70,52,78, 0.5)";
+        document.getElementById("button_2").style.borderColor = "rgba(250,237,38, 1)";
+        document.getElementById("button_1").style.backgroundColor  = "rgba(72,66,75,1)";
+        document.getElementById("button_1").style.color = "white";
+        document.getElementById("button_1").style.borderColor = "rgba(72,66,75,1)";
+        document.getElementById("button_3").style.backgroundColor  = "rgba(72,66,75,1)";
+        document.getElementById("button_3").style.color = "white";
+        document.getElementById("button_3").style.borderColor = "rgba(72,66,75,1)";
+
+        console.log(a);
+    }
+    else{
+        document.getElementById("button_3").style.backgroundColor  = "rgba(250,237,38, 0.9)";
+        document.getElementById("button_3").style.color = "rgba(70,52,78, 0.5)";
+        document.getElementById("button_3").style.borderColor = "rgba(250,237,38, 1)";
+        document.getElementById("button_1").style.backgroundColor  = "rgba(72,66,75,1)";
+        document.getElementById("button_1").style.color = "white";
+        document.getElementById("button_1").style.borderColor = "rgba(72,66,75,1)";
+        document.getElementById("button_2").style.backgroundColor  = "rgba(72,66,75,1)";
+        document.getElementById("button_2").style.color = "white";
+        document.getElementById("button_2").style.borderColor = "rgba(72,66,75,1)";
+        console.log(a);
+    }
+
+
+
+}
+
+
+
+function select_action(a){
+    if (a==1){
+        create_alert(0,0,'','','');
+        create_policy(0);
+        create_action_group(0,0,'','');
+        document.getElementById("window_1").style.zIndex = "2";
+        document.getElementById("window_2").style.zIndex = "1";
+        document.getElementById("window_3").style.zIndex = "1";
+         make_active(a);
+        console.log(a);
+    }
+    else if(a==2){
+        create_alert(0,0,'','','');
+        create_action_group(0,0,'','');
+        create_policy(0);
+        document.getElementById("window_1").style.zIndex = "1";
+        document.getElementById("window_2").style.zIndex= "2";
+        document.getElementById("window_3").style.zIndex= "1";
+         make_active(a);
+        console.log(a);
+    }
+    else{
+        create_alert(0,0,'','','');
+        create_action_group(0,0,'','');
+        create_policy(0);
+        document.getElementById("window_1").style.zIndex= "1";
+        document.getElementById("window_2").style.zIndex= "1";
+        document.getElementById("window_3").style.zIndex= "2";
+         make_active(a);
+        console.log(a);
+    }
+
+
+
+
+
+
+}
+
+function create_policy(a){
+    if(a==1){
+    document.getElementById("popup_window_3").style.width = "40%";
+    var new_policy_id = PolicyCount + 1001;
+    document.getElementById('policy_id').value = new_policy_id;
+    health_rule_view()
+    }
+    else{
+    document.getElementById("popup_window_3").style.width = "0%";
+
+    }
+
+}
+
+
+
+function create_action_group(a,id,name,email){
+    if(a==1){
+        document.getElementById("popup_window_2").style.width = "40%";
+        if(id==0){
+            document.getElementById("groupID").value = 1001+ ActionGroupCount;
+            document.getElementById("group_name").value = '';
+            document.getElementById("email_list").value ='';
+            }
+        else{
+            document.getElementById("groupID").value=id;
+            document.getElementById("group_name").value = name;
+            var elen= email.length;
+            var i;
+            var content='';
+
+            for(i=0; i<elen; i++){
+                content= content + email[i]+ ',\n';
+
+            document.getElementById("email_list").value = content;
+
+            }
+
+
+
+
+
+        }
+
+
+
+
+
+    }
+    else{
+        document.getElementById("popup_window_2").style.width = "0%";
+
+    }
+
+}
+
+function create_alert(a,id,name,application,node){
+
+    if(a==1){
+        document.getElementById("popup_window_1").style.width = "40%";
+        if(id==0){
+            document.getElementById("rule_id").value = HealthRuleListSize + 1001;
+            document.getElementById("application").value = document.getElementById("application_select").value;
+            document.getElementById("node").text = document.getElementById("node_select").text;
+            document.getElementById("node").value = document.getElementById("node_select").value;
+            document.getElementById("health_rule_name").value= '';
+        }else{
+           document.getElementById("rule_id").value=id;
+           document.getElementById("application").value = application;
+
+           OnChooseApplication_form();
+           document.getElementById("node").value = node;
+           document.getElementById("node").value = node;
+           document.getElementById("health_rule_name").value= name;
+        }
+
+    }
+    else{
+        document.getElementById("popup_window_1").style.width = "0%";
+
+
+    }
+
+}
+function set_action_group_into_policy(a){
+
+document.getElementById('action_group').value = a;
+
+
+}
+
+function set_health_rule_into_policy(a){
+
+document.getElementById('health_rule').value = a;
+
+
+}
+
+
+function heath_rule_view(){
+document.getElementById("health_rule_button").classList.add("yellow-button");
+document.getElementById("health_rule_button").classList.remove("grey-button");
+document.getElementById("action_group_button").classList.remove("yellow-button");
+document.getElementById("action_group_button").classList.add("grey-button");
+
+document.getElementById("choice-table").innerHTML=`
+                 <table>
+                 <tr class="table-heading">
+                    <td >Alert ID</td>
+                    <td>Alert Name</td>
+
+
+                </tr>
+                {% set count = namespace(value=0) %}
+                {% for alert in alert_list%}
+                    {% if count.value == 0 %}
+                        {% set count.value = 1 %}
+                        <tr class="white-row" onclick="set_health_rule_into_policy({{alert['alert_ID']}})">
+                            <td>{{alert['alert_ID']}}</td>
+                            <td>{{alert['description']}}</td>
+
+                        </tr>
+                    {% else %}
+                        {% set count.value = 0 %}
+                        <tr class="grey-row" onclick="set_health_rule_into_policy({{alert['alert_ID']}})">
+                            <td>{{alert['alert_ID']}}</td>
+                            <td>{{alert['description']}}</td>
+
+                        </tr>
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+                </table>`;
+}
+
+
+function action_group_view(){
+document.getElementById("health_rule_button").classList.remove("yellow-button");
+document.getElementById("health_rule_button").classList.add("grey-button");
+document.getElementById("action_group_button").classList.remove("grey-button");
+document.getElementById("action_group_button").classList.add("yellow-button");
+document.getElementById("choice-table").innerHTML=`<table>
+                <tr class="table-heading">
+                    <td >Group ID</td>
+                    <td>Group Name</td>
+
+
+                </tr>
+                {% set count = namespace(value=0) %}
+                {% for group in group_list%}
+                    {% if count.value == 0 %}
+                        {% set count.value = 1 %}
+
+                        <tr class="white-row" onclick="set_action_group_into_policy({{group['group_ID']}})">
+                            <td >{{group['group_ID']}}</td>
+                            <td>{{group['group_name']}}</td>
+
+
+                </tr>
+                    {% else %}
+                        {% set count.value = 0 %}
+
+                        <tr class="grey-row" onclick="set_action_group_into_policy({{group['group_ID']}})">
+                            <td>{{group['group_ID']}}</td>
+                            <td>{{group['group_name']}}</td>
+
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+
+            </table>`;
+}
+
+
+
+
+
+function openNav() {
+  if (open_close==0){
+    document.getElementById("work-area").style.width = "85%";
+    document.getElementById("mySidenav").style.width = "15%";
+    document.getElementById("open-closebtn").innerHTML= "&#9650;";
+    open_close=1;
+  }else
+  {
+    document.getElementById("mySidenav").style.width = "0%";
+    document.getElementById("work-area").style.width = "100%";
+    document.getElementById("open-closebtn").innerHTML= "&#9660;";
+    open_close=0;
+   }
+}
+
+
+</script>
+</body>
+</html>

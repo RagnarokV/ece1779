@@ -1,0 +1,1 @@
+{"company_name": "testAccount", "application_name": "Doors", "adjacency_list": [[0, 1, 1], [0, 0, 0], [0, 0, 0]], "node_list": [{"node_ID": 10001004, "node_type": "Server"}, {"node_ID": 10001005, "node_type": "VM"}, {"node_ID": 10001006, "node_type": "PC"}]}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+    </head>
+<body class="hero-image-full">
+
+
+
+    <ul>
+
+
+        <li><a href="{{url_for('login')}}">Login</a></li>
+
+        <li><a class="active" href="{{url_for('register_page')}}">Register</a></li>
+
+    </ul>
+
+    <div style="height:100%;">
+    <br><br><br><br>
+    <form action="{{url_for('register_page')}}" method="POST">{{ form.hidden_tag() }}
+    <div class="form-area" style="width:380px;">
+
+        <div class="text-box" style="font-size: 24px">Register</div>
+        <div class="text-box" style="font-size: 12px">to join the DynaBlaze Family</div>
+        <br>
+        <div class="text-box" style="font-size: 12px">Already a <a href="{{url_for('login')}}" style="color:rgba(250,237,38, 0.9);"> existing Account? </a></div>
+        <br>
+
+        {{ form.account(class="input100",placeholder="Account")}}
+        {% if form.account.errors %}
+        <div class="text-box" style="font-size: 12px;color:rgba(255,0,0, 1);">
+            {% for error in form.account.errors %}
+                                    <span>{{ error }}</span>
+            {% endfor %}
+        </div><br>
+        {% else %}
+            <br><br>
+        {% endif %}
+        <div class="text-box" style="font-size: 12px">    </div>
+        {{ form.password(class="input100",placeholder="Root Password")}}
+        {% if form.password.errors %}
+        <div class="text-box" style="font-size: 12px;color:rgba(255,0,0, 1);">
+            {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+            {% endfor %}
+        </div><br>
+        {% else %}
+            <br><br>
+        {% endif %}
+        <div class="text-box" style="font-size: 12px">    </div>
+
+        {{ form.confirm_password(class="input100",placeholder="Re-type Root Password")}}
+        {% if form.confirm_password.errors %}
+        <div class="text-box" style="font-size: 12px;color:rgba(255,0,0, 1);">
+            {% for error in form.confirm_password.errors %}
+                                    <span>{{ error }}</span>
+            {% endfor %}
+        </div>
+        {% else %}
+            <br>
+        {% endif %}
+        {% if error %}
+        <div class="text-box" style="font-size: 12px;color:rgba(255,0,0, 1);">{{error}}</div>
+        {% else %}
+        <div class="text-box" style="font-size: 12px;color:rgba(0,255,0, 1);">{{success}}</div>
+        {% endif %}
+
+        <br>
+
+
+        <div class="text-box" style="font-size: 14px">{{ form.submit(class="yellow-button") }}</div>
+    </div></form>
+    </div>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

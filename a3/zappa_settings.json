@@ -1,0 +1,11 @@
+{
+    "dev": {
+        "app_function": "app.route.webapp",
+        "aws_region": "us-east-1",
+        "profile_name": "default",
+        "project_name": "final-project",
+        "runtime": "python3.6",
+        "s3_bucket": "zappa-8b4lv69el",
+        "slim_handler": true
+    }
+}

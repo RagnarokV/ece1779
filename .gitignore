@@ -1,0 +1,22 @@
+# temp files in mac
+.DS_Store
+
+# pycache
+*.pyc
+
+# csv files for submission details
+*.csv
+
+# zipped files
+*.zip
+
+# opencv
+*.pb
+
+# images for testing
+*.png
+*.jpg
+*.jpeg 
+
+# tutorial folder
+databases/

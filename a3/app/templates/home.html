@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='flot/jquery.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='flot/jquery.flot.js') }}"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+<body class="hero-image-none">
+
+
+
+    <ul>
+            <li><a href= "{{url_for('login')}}">Logout</a></li>
+
+            <li><a href="{{url_for('admin_page')}}">Administrator</a></li>
+    
+            <li><a  href="{{url_for('dashboard_page')}}">Dashboard</a></li>
+    
+            <li><a href="{{url_for('alert_page')}}">Alerts</a></li>
+    
+            <li><a href="{{url_for('monitor_page')}}">Monitoring</a></li>
+    
+            <li><a class="active" href="{{url_for('home_page')}}">Home</a></li>
+
+        </ul>
+
+        <div id="mySidenav" class="sidenav">
+    
+            <a onclick="select_action(1)" id="button_1">Overview</a>
+            <a onclick="select_action(2)" id="button_2">Create New Application</a>
+            <a onclick="select_action(3)" id="button_3">Modify Application</a>
+        </div>
+        <div class="work-area" id="work-area">
+            <div class="open-closebtn" id="open-closebtn" onclick="openNav()">&#9660;</div>
+            <div class="work-area-switcher" id="window_1" style="z-index: 2;">
+                    <form action="{{url_for('home_page')}}" method="POST" enctype="multipart/form-data"><br><br>
+
+                        <div class="form-area" style="width:40%;left:0%; -webkit-transform: translate(0%, 0%); margin:20px;display:inline-block;">
+                            <div class="text-box" style="font-size: 24px; float:left;">Application Overview</div><br>
+                            <br><br>
+                            <div class="dropdownContainer">
+                                <div class="text-box" style="font-size: 14px; float:left;">Application Name</div><br>
+                                {{ form2.application(class="input100",style="width:400px; float:left;",onchange="putImage()",placeholder="Select Application")}}
+                                <br><br>
+        
+                            </div>
+                            <br><br><br><br><br>
+                            <div style="width:100%; text-align: center;">
+                                <div class='form-area-invisible' style="margin: 0 auto;padding:0px;overflow:hidden;" id="imageContainer">
+        
+                                </div>
+                            </div>
+        
+        
+        
+                            <div class="dropdownContainer" style="font-size: 14px; float:right;">
+                                <div class="text-box" style="font-size: 14px; float:left;"></div><br>
+        
+                            </div>
+                        </div>
+                        <div class="form-area" style="width:35%;left:0%; -webkit-transform: translate(0%, 0%); margin:20px;display:inline-block; float:right;">
+                            <div class="text-box" style="font-size: 24px; float:left;">Events Overview</div><br>
+                            <br><br>
+                            <div class="form-area" id='alert_table' style="width:90%;border-color: rgba(0,0,0,0); padding:0px;">
+        
+                                <table>
+                                    <tr class="table-heading">
+                                        <td >Event Time</td>
+                                        <td>Alert ID</td>
+                                        <td>Policy ID</td>
+        
+        
+                                    </tr>
+                                    {% set count = namespace(value=0) %}
+                                    {% for event in event_list%}
+                                        {% if count.value == 0 %}
+                                            {% set count.value = 1 %}
+                                            <tr class="white-row" >
+                                                <td>{{event['time_alert']}}</td>
+                                                <td>{{event['alertid']}}</td>
+                                                <td>{{event['policyID']}}</td>
+        
+                                            </tr>
+                                        {% else %}
+                                            {% set count.value = 0 %}
+                                            <tr class="grey-row" >
+                                                <td>{{event['time_alert']}}</td>
+                                                <td>{{event['alertid']}}</td>
+                                                <td>{{event['policyID']}}</td>
+        
+                                            </tr>
+        
+                                        {% endif %}
+        
+        
+                                    {% endfor %}
+        
+        
+                                </table>
+        
+                        </div>
+                        </div>
+                    </form>
+    
+    
+    
+    
+            </div>
+            <div class="work-area-switcher" id="window_2" style="z-index: 1;">
+                <form action="{{url_for('home_page')}}" method="POST" enctype="multipart/form-data">{{ form.hidden_tag() }}
+                     <div class="form-area" style="height:320px;width:550px;">
+    
+                     <div class="text-box" style="font-size: 24px">Create New Application</div>
+                         <br>
+                      {{ form.application(class="input100",placeholder="New Application Name")}}
+                         <br><br>
+                     <div class="text-box" style="font-size: 12px">Browse Property File and Select</div>
+    
+                    <br>
+                    {{ form.upload(class="input100",id='browse')}}
+    
+    
+                    {% if form.upload.errors %}
+                    <div class="text-box" style="font-size: 12px;color:rgba(255,0,0, 1);">
+                    {% for error in form.upload.errors %}
+                                        <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                    {% else %}
+                    <br>
+                    {% endif %}
+    
+                    <br>
+                    <div class="text-box" style="font-size: 12px">Accepted Formate .prop </div>
+                    <br>
+                     <div class="text-box" style="font-size: 14px">{{ form.submit(class="yellow-button") }}<button class="grey-button" onclick="document.getElementById('browse').click();" >Browse</button></div>
+                </div></form>
+            </div>
+            <div class="work-area-switcher" id="window_3" style="z-index: 1;">Modify Application</div>
+    
+        </div>
+    
+    
+    <script>
+    
+    putImage();
+    var open_close;
+    open_close=0;
+    function putImage(){
+        var application= document.getElementById("application").value;
+        var image_name= '{{account}}_'+application+'.png';
+        console.log(image_name);
+    
+        document.getElementById("imageContainer").innerHTML="<img src='/dev/static/graphs/"+image_name+"'/>";
+    }
+    function make_active(a){
+        if (a==1){
+            document.getElementById("button_1").style.backgroundColor  = "rgba(250,237,38, 0.9)";
+            document.getElementById("button_1").style.color = "rgba(70,52,78, 0.5)";
+            document.getElementById("button_1").style.borderColor = "rgba(250,237,38, 1)";
+            document.getElementById("button_2").style.backgroundColor  = "rgba(72,66,75,1)";
+            document.getElementById("button_2").style.color = "white";
+            document.getElementById("button_2").style.borderColor = "rgba(72,66,75,1)";
+            document.getElementById("button_3").style.backgroundColor  = "rgba(72,66,75,1)";
+            document.getElementById("button_3").style.color = "white";
+            document.getElementById("button_3").style.borderColor = "rgba(72,66,75,1)";
+    
+            console.log(a);
+        }
+        else if(a==2){
+            document.getElementById("button_2").style.backgroundColor  = "rgba(250,237,38, 0.9)";
+            document.getElementById("button_2").style.color = "rgba(70,52,78, 0.5)";
+            document.getElementById("button_2").style.borderColor = "rgba(250,237,38, 1)";
+            document.getElementById("button_1").style.backgroundColor  = "rgba(72,66,75,1)";
+            document.getElementById("button_1").style.color = "white";
+            document.getElementById("button_1").style.borderColor = "rgba(72,66,75,1)";
+            document.getElementById("button_3").style.backgroundColor  = "rgba(72,66,75,1)";
+            document.getElementById("button_3").style.color = "white";
+            document.getElementById("button_3").style.borderColor = "rgba(72,66,75,1)";
+    
+            console.log(a);
+        }
+        else{
+            document.getElementById("button_3").style.backgroundColor  = "rgba(250,237,38, 0.9)";
+            document.getElementById("button_3").style.color = "rgba(70,52,78, 0.5)";
+            document.getElementById("button_3").style.borderColor = "rgba(250,237,38, 1)";
+            document.getElementById("button_1").style.backgroundColor  = "rgba(72,66,75,1)";
+            document.getElementById("button_1").style.color = "white";
+            document.getElementById("button_1").style.borderColor = "rgba(72,66,75,1)";
+            document.getElementById("button_2").style.backgroundColor  = "rgba(72,66,75,1)";
+            document.getElementById("button_2").style.color = "white";
+            document.getElementById("button_2").style.borderColor = "rgba(72,66,75,1)";
+            console.log(a);
+        }
+    
+    
+    
+    }
+    
+    
+    
+    function select_action(a){
+        if (a==1){
+            document.getElementById("window_1").style.zIndex = "2";
+            document.getElementById("window_2").style.zIndex = "1";
+            document.getElementById("window_3").style.zIndex = "1";
+             make_active(a);
+            console.log(a);
+        }
+        else if(a==2){
+            document.getElementById("window_1").style.zIndex = "1";
+            document.getElementById("window_2").style.zIndex= "2";
+            document.getElementById("window_3").style.zIndex= "1";
+             make_active(a);
+            console.log(a);
+        }
+        else{
+            document.getElementById("window_1").style.zIndex= "1";
+            document.getElementById("window_2").style.zIndex= "1";
+            document.getElementById("window_3").style.zIndex= "2";
+             make_active(a);
+            console.log(a);
+        }
+    
+    
+    
+    }
+    
+    
+    
+    
+    function openNav() {
+      if (open_close==0){
+        document.getElementById("work-area").style.width = "85%";
+        document.getElementById("mySidenav").style.width = "15%";
+        document.getElementById("open-closebtn").innerHTML= "&#9650;";
+        open_close=1;
+      }else
+      {
+        document.getElementById("mySidenav").style.width = "0%";
+        document.getElementById("work-area").style.width = "100%";
+        document.getElementById("open-closebtn").innerHTML= "&#9660;";
+        open_close=0;
+       }
+    }
+    
+    
+    </script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </body>
+    </html>

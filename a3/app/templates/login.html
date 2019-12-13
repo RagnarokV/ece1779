@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+    </head>
+<body class="hero-image-full">
+
+
+
+    <ul>
+
+
+        <li><a class="active" href="{{url_for('login')}}">Login</a></li>
+
+        <li><a href="{{url_for('register_page')}}">Register</a></li>
+
+    </ul>
+    <div style="height:100%;">
+    <br><br><br><br>
+    <form action="{{url_for('login')}}" method="POST">{{ form.hidden_tag() }}
+    <div class="form-area" style="width:380px;">
+
+        <div class="text-box" style="font-size: 24px">Sign in</div>
+        <div class="text-box" style="font-size: 12px">to continue to DynaBlaze</div>
+        <br><br>
+        <div class="text-box" style="font-size: 12px"><a href="{{url_for('login')}}" style="color:rgba(250,237,38, 0.9);"> Can't access your account?</a></div>
+        <br>
+        {{ form.account(class="input100",placeholder="Account Name")}}
+        <br><br>
+        {{ form.username(class="input100",placeholder="Username")}}
+         <br><br>
+
+        {{ form.password(class="input100",placeholder="Password")}}
+
+
+        <br>
+        <div class="text-box" style="font-size: 12px;color:rgba(255,0,0, 1);">{{error}}</div>
+        <br><br>
+        <br>
+
+        <div class="text-box" style="font-size: 14px">{{ form.submit(class="yellow-button") }}</div>
+    </div></form>
+    </div>
+
+
+
+
+
+
+
+
+
+</body>
+</html>

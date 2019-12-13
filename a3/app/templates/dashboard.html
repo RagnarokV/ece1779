@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main_page.css') }}">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    </head>
+    
+<body class="hero-image-none">
+
+
+    <ul>
+            <li><a href= "{{url_for('login')}}">Logout</a></li>
+
+            <li><a href="{{url_for('admin_page')}}">Administrator</a></li>
+    
+            <li><a  class="active" href="{{url_for('dashboard_page')}}">Dashboard</a></li>
+    
+            <li><a href="{{url_for('alert_page')}}">Alerts</a></li>
+    
+            <li><a href="{{url_for('monitor_page')}}">Monitoring</a></li>
+    
+            <li><a href="{{url_for('home_page')}}">Home</a></li>
+
+    </ul>
+    
+    <div class="work-area" style="overflow:hidden;z-index:1;">
+        <div class="right-popup-window" id="popup_window_1" >
+                <br>
+                <div class="text-box" onclick="create_dashboard(0)" style="padding:5px;width:auto;float:right;cursor: pointer;"><i class="fa fa-close w3-margin-right"></i></div>
+                <form style="height: 70%;" action="{{url_for('dashboard_page')}}" method="POST" enctype="multipart/form-data">
+                    <div class="form-area" style="width:90%;border:None;padding:10px;top:20px; overflow: hidden; height: 90%;">
+                        <br>
+                        <div class="text-box" style="font-size: 24px; float:left;">Create Dashboards</div>
+                        <br><br>
+                        {{dashboard_form.dashboardID()}}
+                        <div class="dropdownContainer">
+                            <br>
+                            <div class="text-box" style="font-size: 14px; float:left;">Dashboard Name</div><br>
+                            {{ dashboard_form.dashboardName(class="input100",style="width:200px; float:left;",placeholder="")}}
+                        </div>
+                        <div class="text-box" style="width:100%; font-size: 24px; float:left;"></div>
+                        <br><br><br>
+                        <div class="text-box" style="font-size: 14px; position: absolute; float:left; width:100%; ">
+                            {{ dashboard_form.create_dashboard(class="yellow-button",style=" float:left;")}}
+                        </div>
+                    </div>
+                </form>
+
+        </div>
+        <div class="work-area" style="width:20%;background-color: rgba(250,255,255, 0.8);overflow:hidden;">
+
+            <div id="myBtn" onclick="create_dashboard(1)" class="clickable"><i class="fa fa-user-plus w3-margin-right"></i>Create New Dashboard</div>
+                        <div id="listBtn" onclick="OpenClose()"  class="clickable-yellow" style="transition: 0.5s;"><i class="fa fa-users w3-margin-right"></i>Dashboard List ({{dashboard_list | count}})<i class="fa fa-caret-up w3-margin-left"></i></div>
+                            <div style="width:100%; height:75%;overflow:hidden;">
+                                <div id="user_container" style="overflow:auto;">
+                                    {% for dashboard in dashboard_list %}
+                                        <div  class="user-list" onclick="selectDashboard({{dashboard}})" ><i class="fa fa-user-circle-o w3-margin-right"></i>{{dashboard['dashboard_name']}}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+        </div>
+
+
+
+        <div class="work-area" style="width:80%;overflow:auto">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+               <ul>
+                  {% for message in messages %}
+                    <center>{{ message }}</center>
+                  {% endfor %}
+               </ul>
+            {% endif %}
+            {% endwith %}
+            <br><br>
+
+            <form action="{{url_for('dashboard_page')}}" method="POST" enctype="multipart/form-data">
+                {{form.DashboardID(id='DashboardID')}}
+                {{form.submit_dashboard(id='dashboard_button',style="visibility: hidden;")}}
+            </form>
+            <div class="form-area" style="width:90%;">
+                 <div class="text-box" id='dashboard_title' style="font-size: 24px; float:left;"></div><br><br>
+                 <div style="width:100%; height: auto;left: 0%;">
+                     {% set count = namespace(value=0) %}
+                     {%for trace in trace_list%}
+                        {% set count.value = count.value + 1 %}
+                        <div class="graph-container" id="graph_container_{{count.value}}"></div>
+
+                     {% endfor %}
+
+                 </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById('dashboard_title').innerHTML='{{dashboard_title}}';
+        var open_flag=1;
+        var dash_board_list_size= {{dashboard_list | count}};
+        var trace_list = {{trace_list|tojson}};
+        plotTraceList();
+        function selectDashboard(dashboard){
+            console.log(dashboard['dashboard_name']);
+
+            document.getElementById('DashboardID').value = dashboard['dashboard_ID'];
+            document.getElementById('dashboard_button').click();
+
+        }
+
+        function OpenClose(){
+            if (open_flag==1){
+            document.getElementById('user_container').style.height = "0px";
+            document.getElementById('user_container').style.overflow = "hidden";
+
+            open_flag=0;
+            document.getElementById('listBtn').innerHTML= "<i class=\"fa fa-users w3-margin-right\"></i>Dashboard List ({{dashboard_list | count}})<i class=\"fa fa-caret-down w3-margin-left\"></i>";
+
+                }
+            else{
+            document.getElementById('user_container').style.overflow = "overflow";
+            document.getElementById('user_container').style.height = "auto";
+            document.getElementById('user_container').style.width = "100%";
+
+            open_flag=1;
+            document.getElementById('listBtn').innerHTML= "<i class=\"fa fa-users w3-margin-right\"></i>Dashboard List ({{dashboard_list | count}})<i class=\"fa fa-caret-up w3-margin-left\"></i>";
+                }
+        }
+
+        function plotTraceList(){
+            var trace_list_length= trace_list.length;
+            var i;
+            for(i=0; i< trace_list_length; i++){
+                current_trace=trace_list[i];
+                var trace ={
+                    x: current_trace['x'],
+                    y:  current_trace['y'],
+                    type: 'scatter',
+                   };
+                var container_name= 'graph_container_' + String(i+1);
+                var data=[trace]
+                Plotly.newPlot(container_name, data, {}, {showSendToCloud: true});
+                }
+        }
+    function create_dashboard(a){
+        if(a==1){
+        document.getElementById("popup_window_1").style.width = "20%";
+        document.getElementById("dashboardID").value = dash_board_list_size + 1001;
+        }
+        else{
+        document.getElementById("popup_window_1").style.width = "0%";
+        }
+}
+    </script>
+</body>
+</html>
